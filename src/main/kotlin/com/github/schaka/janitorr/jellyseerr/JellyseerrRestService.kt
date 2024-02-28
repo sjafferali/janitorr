@@ -27,10 +27,12 @@ class JellyseerrRestService(
             var requests: List<RequestResponse> =
                     // TV show
                     if (item.season != null) {
+                        log.info("item is a show {}", item)
                         allRequests.filter { req -> mediaMatches(item, req) && req.seasons?.any { it.seasonNumber == item.season } ?: false }
                     }
                     // Movie
                     else {
+                        log.info("item is a movie {}", item)
                         allRequests.filter { req -> mediaMatches(item, req) }
                     }
 
@@ -50,6 +52,7 @@ class JellyseerrRestService(
         // Match between Radarr ID or Sonarr ID and the ID Jellyseerr stores for Radarr/Sonarr
         // TODO: Maybe grab the Jellyfin ID here to make deletion in Jellyfin easier down the line?
         if (item.id == candidate.media.externalServiceId) {
+            log.info("service ID matched {}//////{}", item, candidate)
             return true
         }
 
@@ -57,6 +60,7 @@ class JellyseerrRestService(
         val imdbMatches = candidate.media.imdbId != null && (candidate.media.imdbId == item.imdbId)
         val tmdbMatches = candidate.media.tmdbId != null && mediaTypeMatches(item, candidate) && (candidate.media.tmdbId == item.tmdbId)
         val tvdbMatches = candidate.media.tvdbId != null && mediaTypeMatches(item, candidate) && (candidate.media.tvdbId == item.tvdbId)
+        log.info("matches: {} {} {}", imdbMatches, tmdbMatches, tvdbMatches)
         return imdbMatches || tmdbMatches || tvdbMatches
     }
 
