@@ -138,7 +138,7 @@ class JellyfinRestService(
                 // Idea: If we did have an item for every episode in a season, this might work
                 // For now, just assume season folders are always activated
 
-                log.trace("Updating gonsoon {}", it)
+                log.trace("Updating gonsoon {}, {}", it, fileOrFolder.toString())
                 if (type == TV_SHOWS && it.season != null && !filePattern.matches(fileOrFolder.toString())) {
                     // TV Shows
                     val sourceSeasonFolder = rootPath.resolve(itemFolderName).resolve(fileOrFolder)
