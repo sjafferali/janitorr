@@ -48,6 +48,9 @@ class JellyseerrRestService(
     }
 
     private fun mediaMatches(item: LibraryItem, candidate: RequestResponse): Boolean {
+        if (!mediaTypeMatches(item, candidate)) {
+            return false
+        }
 
         // Match between Radarr ID or Sonarr ID and the ID Jellyseerr stores for Radarr/Sonarr
         // TODO: Maybe grab the Jellyfin ID here to make deletion in Jellyfin easier down the line?
@@ -58,9 +61,8 @@ class JellyseerrRestService(
 
         // Fallback, match by meta data
         val imdbMatches = candidate.media.imdbId != null && (candidate.media.imdbId == item.imdbId)
-        val tmdbMatches = candidate.media.tmdbId != null && mediaTypeMatches(item, candidate) && (candidate.media.tmdbId == item.tmdbId)
-        val tvdbMatches = candidate.media.tvdbId != null && mediaTypeMatches(item, candidate) && (candidate.media.tvdbId == item.tvdbId)
-        log.info("matches: {} {} {}", imdbMatches, tmdbMatches, tvdbMatches)
+        val tmdbMatches = candidate.media.tmdbId != null && (candidate.media.tmdbId == item.tmdbId)
+        val tvdbMatches = candidate.media.tvdbId != null && (candidate.media.tvdbId == item.tvdbId)
         return imdbMatches || tmdbMatches || tvdbMatches
     }
 
